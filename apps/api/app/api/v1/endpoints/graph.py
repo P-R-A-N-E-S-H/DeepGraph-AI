@@ -1,0 +1,21 @@
+from typing import List, Optional
+from fastapi import APIRouter, Query
+from app.schemas.graph import SubgraphResponse, GraphAnalyticsResponse
+from app.graph.graph_service import graph_service
+
+router = APIRouter()
+
+@router.get("", response_model=SubgraphResponse)
+async def get_graph_subgraph(
+    types: Optional[List[str]] = Query(None),
+    limit: int = 200
+):
+    return await graph_service.get_subgraph(node_types=types, limit=limit)
+
+@router.get("/entity/{node_id}", response_model=SubgraphResponse)
+async def get_entity_neighborhood(node_id: str, depth: int = 1):
+    return await graph_service.get_neighbors(node_id=node_id, depth=depth)
+
+@router.get("/analytics", response_model=GraphAnalyticsResponse)
+async def get_graph_analytics():
+    return await graph_service.get_analytics()
