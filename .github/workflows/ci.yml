@@ -1,0 +1,53 @@
+name: DeepGraph AI CI/CD
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r apps/api/requirements.txt
+
+      - name: Run Backend Pytest Suite
+        run: |
+          pytest apps/api/tests -v
+
+      - name: Run Quantitative Evaluation Benchmarks
+        run: |
+          python scripts/seed_sample_papers.py
+          python scripts/evaluate_retrieval.py
+
+  frontend-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/web/package.json
+
+      - name: Install Frontend Dependencies
+        working-directory: apps/web
+        run: npm install
+
+      - name: Build Frontend Next.js App
+        working-directory: apps/web
+        run: npm run build
