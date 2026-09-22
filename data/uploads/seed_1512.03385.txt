@@ -1,0 +1,17 @@
+Deep Residual Learning for Image Recognition
+
+Abstract
+Deeper neural networks are more difficult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learning residual functions with reference to the layer inputs. We evaluate ResNet-50 and ResNet-152 on ImageNet and CIFAR-10, achieving 94.2% accuracy and 3.57% top-5 error.
+
+1. Introduction
+Deep convolutional neural networks have led to a series of breakthroughs for image classification. When deeper networks are able to start converging, a degradation problem has been exposed: with network depth increasing, accuracy gets saturated.
+
+2. Methodology
+We address the degradation problem by introducing a deep residual learning framework. Instead of hoping each few stacked layers directly fit a desired underlying mapping, we explicitly let these layers fit a residual mapping F(x) := H(x) - x.
+
+3. Experiments
+We evaluate our residual nets on ImageNet 2012 classification benchmark. Our ResNet-50 and ResNet-152 models achieve 94.2% top-1 accuracy on CIFAR-10 and ImageNet.
+
+4. References
+[1] Alex Krizhevsky et al. ImageNet Classification with Deep Convolutional Neural Networks. NIPS 2012.
+[2] Karen Simonyan and Andrew Zisserman. Very Deep Convolutional Networks for Large-Scale Image Recognition. ICLR 2015.
