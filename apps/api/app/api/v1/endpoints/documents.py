@@ -192,3 +192,29 @@ async def delete_document(document_id: str, db: AsyncSession = Depends(get_db)):
     await db.delete(doc)
     await db.commit()
     return None
+
+@router.post("/batch-process")
+async def trigger_batch_process(
+    document_ids: List[str],
+    background_tasks: BackgroundTasks,
+    batch_name: Optional[str] = None
+):
+    from app.workers.batch_worker import batch_ingestion_manager
+    if not document_ids:
+        raise HTTPException(status_code=400, detail="No document_ids provided")
+
+    batch_id = batch_ingestion_manager.create_batch(document_ids, batch_name=batch_name)
+    background_tasks.add_task(batch_ingestion_manager.process_batch, batch_id, document_ids)
+    return {
+        "message": "Batch processing initiated",
+        "batch_id": batch_id,
+        "total_documents": len(document_ids)
+    }
+
+@router.get("/batch-status/{batch_id}")
+async def get_batch_status(batch_id: str):
+    from app.workers.batch_worker import batch_ingestion_manager
+    status_data = batch_ingestion_manager.get_batch_status(batch_id)
+    if not status_data:
+        raise HTTPException(status_code=404, detail="Batch job not found")
+    return status_data
