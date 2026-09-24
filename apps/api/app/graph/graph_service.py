@@ -74,4 +74,13 @@ class GraphService:
             top_connected_entities=data["top_connected_entities"]
         )
 
+    async def get_centrality(self) -> Dict[str, Any]:
+        return in_memory_graph.get_centrality_metrics()
+
+    async def get_communities(self) -> Dict[str, Any]:
+        return in_memory_graph.detect_communities()
+
+    async def get_shortest_path(self, source_id: str, target_id: str) -> Dict[str, Any]:
+        return in_memory_graph.find_shortest_path(source_id, target_id)
+
 graph_service = GraphService()
