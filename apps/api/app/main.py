@@ -11,6 +11,8 @@ from app.core.neo4j import neo4j_client
 from app.core.redis import redis_client
 from app.api.v1.api import api_router
 
+from app.core.metrics import metrics_collector
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting DeepGraph AI API Gateway...")
@@ -50,6 +52,7 @@ async def request_observability_middleware(request: Request, call_next):
     response = await call_next(request)
     
     latency_ms = round((time.time() - start_time) * 1000.0, 2)
+    metrics_collector.record_request(latency_ms)
     response.headers["X-Request-ID"] = req_id
     response.headers["X-Response-Time-MS"] = str(latency_ms)
     
@@ -71,6 +74,12 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 # Include API Router
 app.include_router(api_router, prefix=settings.API_V1_PREFIX)
+
+@app.get("/metrics")
+async def prometheus_metrics():
+    from fastapi import Response
+    content = metrics_collector.generate_prometheus_output()
+    return Response(content=content, media_type="text/plain; version=0.0.4")
 
 @app.get("/")
 async def root():
