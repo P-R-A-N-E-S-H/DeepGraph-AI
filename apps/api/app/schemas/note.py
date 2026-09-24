@@ -1,6 +1,6 @@
 from typing import List, Optional, Dict, Any
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 class ResearchNoteBase(BaseModel):
     title: str = Field(..., max_length=255)
@@ -23,8 +23,7 @@ class ResearchNoteResponse(ResearchNoteBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class PaperAnnotationBase(BaseModel):
     paper_id: str
@@ -48,8 +47,7 @@ class PaperAnnotationResponse(PaperAnnotationBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class BookmarkBase(BaseModel):
     paper_id: str
@@ -71,5 +69,4 @@ class BookmarkResponse(BookmarkBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
