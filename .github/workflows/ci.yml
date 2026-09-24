@@ -22,15 +22,17 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r apps/api/requirements.txt
+          pip install pytest pytest-cov pytest-asyncio
 
-      - name: Run Backend Pytest Suite
+      - name: Run Backend Pytest Suite with Coverage
         run: |
-          pytest apps/api/tests -v
+          pytest apps/api/tests -v --cov=apps/api/app --cov-report=term --cov-report=xml
 
-      - name: Run Quantitative Evaluation Benchmarks
+      - name: Run Quantitative Evaluation & Health Probes
         run: |
           python scripts/seed_sample_papers.py
           python scripts/evaluate_retrieval.py
+          python scripts/graph_health_check.py
 
   frontend-check:
     runs-on: ubuntu-latest
@@ -46,8 +48,8 @@ jobs:
 
       - name: Install Frontend Dependencies
         working-directory: apps/web
-        run: npm install
+        run: npm ci || npm install
 
-      - name: Build Frontend Next.js App
+      - name: Build Frontend Next.js Production App
         working-directory: apps/web
         run: npm run build
