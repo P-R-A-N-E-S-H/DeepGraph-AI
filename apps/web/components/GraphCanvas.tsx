@@ -29,7 +29,7 @@ import {
   CheckCircle2,
   X
 } from 'lucide-react'
-import { graphService, GraphNode, GraphEdge, SubgraphResponse } from '@/services/graph'
+import { graphService, GraphNode, GraphEdge, SubgraphResponse, CentralityResponse, CommunitiesResponse } from '@/services/graph'
 
 const TYPE_COLORS: Record<string, { bg: string; border: string; text: string; dot: string; glow: string }> = {
   Paper: { bg: 'rgba(20, 184, 166, 0.18)', border: '#14b8a6', text: '#2dd4bf', dot: '#14b8a6', glow: 'rgba(20, 184, 166, 0.4)' },
@@ -53,6 +53,22 @@ export default function GraphCanvas({ initialTypes }: GraphCanvasProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [depth, setDepth] = useState<number>(1)
   const [isLoading, setIsLoading] = useState(true)
+  const [showAnalytics, setShowAnalytics] = useState(false)
+  const [centralityData, setCentralityData] = useState<CentralityResponse | null>(null)
+  const [communitiesData, setCommunitiesData] = useState<CommunitiesResponse | null>(null)
+
+  const loadCentralityAndCommunities = async () => {
+    try {
+      const [c, comm] = await Promise.all([
+        graphService.getCentrality(),
+        graphService.getCommunities()
+      ])
+      setCentralityData(c)
+      setCommunitiesData(comm)
+    } catch (e) {
+      console.error('Failed to load centrality/communities:', e)
+    }
+  }
 
   const loadGraphData = async () => {
     setIsLoading(true)
@@ -200,6 +216,19 @@ export default function GraphCanvas({ initialTypes }: GraphCanvasProps) {
           <div className="h-4 w-px bg-border mx-1" />
 
           <button
+            onClick={() => {
+              setShowAnalytics(!showAnalytics)
+              if (!centralityData) loadCentralityAndCommunities()
+            }}
+            className={`px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-all ${
+              showAnalytics ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'bg-secondary text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Graph Analytics</span>
+          </button>
+
+          <button
             onClick={loadGraphData}
             title="Reload Knowledge Graph"
             className="p-1.5 rounded-xl hover:bg-secondary text-muted-foreground hover:text-foreground transition-all"
@@ -207,6 +236,48 @@ export default function GraphCanvas({ initialTypes }: GraphCanvasProps) {
             <RefreshCw className="w-3.5 h-3.5" />
           </button>
         </div>
+
+        {/* Analytics & Communities Drawer Overlay */}
+        {showAnalytics && (
+          <div className="absolute top-16 left-4 z-20 w-80 bg-slate-900/95 backdrop-blur-xl border border-slate-800 rounded-2xl p-4 shadow-2xl space-y-4 max-h-[560px] overflow-y-auto animate-in fade-in duration-150">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <span className="text-xs font-bold uppercase text-brand-400 font-mono">Centrality & Clusters</span>
+              <button onClick={() => setShowAnalytics(false)} className="text-slate-400 hover:text-white">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Top Influencers */}
+            <div>
+              <h4 className="text-xs font-bold text-white mb-2">Top Influencer Entities (PageRank)</h4>
+              <div className="space-y-1.5">
+                {(centralityData?.top_influencers || []).slice(0, 5).map((inf, idx) => (
+                  <div key={idx} className="flex items-center justify-between text-xs bg-slate-950/60 p-2 rounded-lg border border-slate-800/80">
+                    <span className="text-slate-200 font-medium truncate max-w-[170px]">{inf.name}</span>
+                    <span className="text-[10px] font-mono text-brand-300 font-bold">{(inf.score * 100).toFixed(1)}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Clusters */}
+            <div>
+              <h4 className="text-xs font-bold text-white mb-2">
+                Knowledge Communities ({communitiesData?.total_communities || 0})
+              </h4>
+              <div className="space-y-2">
+                {(communitiesData?.communities || []).slice(0, 4).map((comm) => (
+                  <div key={comm.cluster_id} className="bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80 text-xs">
+                    <div className="flex items-center justify-between font-medium text-slate-100 mb-1">
+                      <span>{comm.cluster_name}</span>
+                      <span className="text-[10px] text-slate-500 font-mono">{comm.size} nodes</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         <ReactFlow
           nodes={nodes}
