@@ -183,7 +183,11 @@ export default function TimelinePage() {
                   {evt.key_contribution}
                 </p>
 
-                <div className="pt-2 flex justify-end">
+                <div className="pt-2 flex items-center justify-between">
+                  <span className="text-[11px] text-slate-500 font-mono">
+                    Provenance: Verified Academic Baseline
+                  </span>
+
                   <button
                     onClick={() => router.push(`/chat?q=Explain the breakthrough methodology in ${encodeURIComponent(evt.title)} and how it advanced AI.`)}
                     className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs transition-all shadow-md shadow-teal-500/20 active:scale-95"
