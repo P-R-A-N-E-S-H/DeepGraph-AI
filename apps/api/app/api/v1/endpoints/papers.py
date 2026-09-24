@@ -52,3 +52,52 @@ async def get_paper(paper_id: str, db: AsyncSession = Depends(get_db)):
         created_at=p.created_at,
         authors=[AuthorResponse(id=a.id, name=a.name, affiliation=a.affiliation) for a in (p.authors or [])]
     )
+
+@router.get("/lookup/doi/{doi:path}")
+async def lookup_crossref_doi(doi: str):
+    from app.ingestion.crossref_service import crossref_service
+    metadata = await crossref_service.fetch_doi_metadata(doi)
+    if not metadata:
+        raise HTTPException(status_code=404, detail=f"No CrossRef record found for DOI {doi}")
+    return metadata
+
+@router.get("/lookup/semantic-scholar/{identifier:path}")
+async def lookup_semantic_scholar(identifier: str):
+    from app.ingestion.semanticscholar_service import semanticscholar_service
+    metadata = await semanticscholar_service.fetch_paper_enrichment(identifier)
+    if not metadata:
+        raise HTTPException(status_code=404, detail=f"No Semantic Scholar record found for {identifier}")
+    return metadata
+
+@router.post("/{paper_id}/enrich")
+async def enrich_paper_metadata(paper_id: str, db: AsyncSession = Depends(get_db)):
+    from app.ingestion.crossref_service import crossref_service
+    from app.ingestion.semanticscholar_service import semanticscholar_service
+    
+    stmt = select(Paper).options(selectinload(Paper.authors)).where(Paper.id == paper_id)
+    res = await db.execute(stmt)
+    paper = res.scalar_one_or_none()
+    if not paper:
+        raise HTTPException(status_code=404, detail="Paper not found")
+        
+    enriched = {}
+    if paper.doi:
+        cr_data = await crossref_service.fetch_doi_metadata(paper.doi)
+        if cr_data:
+            enriched["crossref"] = cr_data
+            if cr_data.get("citation_count"):
+                paper.citation_count = max(paper.citation_count, cr_data["citation_count"])
+            if cr_data.get("venue") and not paper.venue:
+                paper.venue = cr_data["venue"]
+    
+    ss_query = paper.doi or paper.arxiv_id or paper.title
+    if ss_query:
+        ss_data = await semanticscholar_service.fetch_paper_enrichment(ss_query)
+        if ss_data:
+            enriched["semantic_scholar"] = ss_data
+            if ss_data.get("citation_count"):
+                paper.citation_count = max(paper.citation_count, ss_data["citation_count"])
+
+    await db.commit()
+    await db.refresh(paper)
+    return {"message": "Paper enriched successfully", "paper_id": paper.id, "enrichment": enriched}
