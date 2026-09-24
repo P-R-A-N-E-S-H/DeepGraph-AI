@@ -42,6 +42,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from app.core.rate_limit import rate_limiter
+
 # Request ID and Latency Middleware
 @app.middleware("http")
 async def request_observability_middleware(request: Request, call_next):
@@ -49,6 +51,13 @@ async def request_observability_middleware(request: Request, call_next):
     request.state.request_id = req_id
     start_time = time.time()
     
+    # Check rate limit
+    try:
+        await rate_limiter.middleware_check(request)
+    except Exception as e:
+        if isinstance(e, HTTPException):
+            return JSONResponse(status_code=e.status_code, content={"detail": e.detail})
+
     response = await call_next(request)
     
     latency_ms = round((time.time() - start_time) * 1000.0, 2)
