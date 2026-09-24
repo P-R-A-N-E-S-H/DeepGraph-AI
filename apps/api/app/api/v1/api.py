@@ -12,6 +12,7 @@ from app.api.v1.endpoints import (
     analytics,
     workspaces,
     export,
+    notes,
     health
 )
 
@@ -30,3 +31,4 @@ api_router.include_router(gaps.router, prefix="/gaps", tags=["Research Gap Disco
 api_router.include_router(analytics.router, prefix="/analytics", tags=["Analytics & Timeline"])
 api_router.include_router(workspaces.router, prefix="/workspaces", tags=["Research Workspaces"])
 api_router.include_router(export.router, prefix="/export", tags=["Citation & Bibliographic Export"])
+api_router.include_router(notes.router, prefix="/notes", tags=["Research Notes & Annotations"])
