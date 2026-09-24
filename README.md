@@ -10,14 +10,20 @@ DeepGraph AI is a production-grade research intelligence platform engineered to 
 
 - **Intelligent Structure-Aware Ingestion**: Automatically segments PDFs into Abstract, Introduction, Related Work, Methodology, Experiments, Results, Discussion, and References while preserving exact page and section provenance.
 - **Direct arXiv Search & 1-Click Import**: Seamlessly search the global arXiv corpus and ingest papers directly into the unified parsing and indexing pipeline.
-- **Hybrid Vector + Knowledge Graph Retrieval**: Fuses dense pgvector embeddings ($w=0.50$) with Neo4j entity neighborhood traversals ($w=0.30$) and metadata filtering ($w=0.20$).
+- **Hybrid Vector + Knowledge Graph Retrieval**: Fuses dense pgvector embeddings ($w=0.50$) with Neo4j entity neighborhood traversals ($w=0.30$), metadata filtering ($w=0.20$), and Maximal Marginal Relevance (MMR) deduplication.
+- **Hypothetical Document Embeddings (HyDE)**: Generates synthetic technical abstracts to dramatically improve recall on complex or zero-shot research questions.
+- **Systematic Literature Review Synthesizer**: Automates multi-paper meta-analyses, thematic taxonomies, empirical consensus discovery, and markdown export drafts.
+- **Research Notes & Highlighting Studio**: Dedicated notes manager with Markdown formatting, tag filters, page-level PDF annotations, and bookmark folders.
+- **Real-Time DOI & Citation Enrichment**: Live integration with CrossRef and Semantic Scholar APIs for automated retrieval of publisher citations, h-indices, and open-access PDFs.
+- **Graph Centrality & Community Detection**: Real-time PageRank, Betweenness Centrality, and Louvain modularity clustering over research entities.
+- **BibTeX, RIS & CSL-JSON Citation Exporter**: 1-click bibliographic export with support for APA, IEEE, Chicago, and Harvard citation styles.
 - **LangGraph Multi-Agent Research Assistant**: Executes a 7-step reasoning graph (`QueryPlanner` → `RetrieverAgent` → `GraphReasoningAgent` → `EvidenceAgent` → `ResearchSynthesizer` → `CitationVerifier` → `ResponseFormatter`).
 - **Strict Citation Verification**: 100% citation grounding guarantee. Every factual claim is validated against retrieved chunks; ungrounded assertions are strictly suppressed.
 - **Multi-Paper Comparative Matrix**: Synthesizes side-by-side matrices across research problems, architectures, benchmark datasets, evaluation metrics, computational costs, and reported limitations.
-- **Research Gap & Open Frontier Discovery**: Detects contradictions, computational bottlenecks, and unaddressed scientific challenges across publications, labeling them as potential research directions.
-- **Interactive Knowledge Graph Canvas**: Visualizes papers, models, datasets, methods, and metrics with React Flow with node type filtering and entity neighborhood inspection.
-- **Workspaces & Research Notebook**: Organize paper collections into research dossiers with Markdown exports.
-- **Prompt-Injection Defense**: Isolates untrusted document text behind `<UNTRUSTED_RESEARCH_DOCUMENT_EVIDENCE>` security boundaries.
+- **Research Gap & Open Frontier Discovery**: Detects contradictions, computational bottlenecks, and unaddressed scientific challenges across publications.
+- **Interactive Knowledge Graph Canvas**: Visualizes papers, models, datasets, methods, and metrics with React Flow, node type filters, and community overlays.
+- **Prometheus Metrics Exporter & Token Bucket Rate Limiter**: Production observability via `/metrics` with sliding-window API abuse protection.
+- **Enterprise Prompt-Injection Defense**: Isolates untrusted document text behind `<UNTRUSTED_RESEARCH_DOCUMENT_EVIDENCE>` security boundaries with PII redaction.
 
 ---
 
@@ -28,27 +34,28 @@ flowchart TB
     subgraph Frontend["Next.js 14 Web Application"]
         Overview[Research Dashboard]
         ChatUI[AI Research Assistant & LaTeX/Citations]
-        GraphCanvas[React Flow Knowledge Graph]
+        GraphCanvas[React Flow Knowledge Graph & Centrality]
+        ReviewsUI[Systematic Review Synthesizer]
+        NotesUI[Research Notes & Bookmark Manager]
         CompareStudio[Multi-Paper Comparison Matrix]
         GapsExplorer[Research Gap Discovery Explorer]
-        Workspaces[Research Notebook & Workspaces]
+        TimelineUI[Research Evolution Timeline]
     end
 
     subgraph API["FastAPI REST & Streaming Gateway"]
         AuthService[JWT & RBAC Auth Middleware]
-        DocService[Document Ingestion & arXiv API]
-        SearchService[Hybrid Retrieval & Weighted Fusion]
-        AgentEngine[LangGraph Multi-Agent Orchestrator]
-        GraphService[Knowledge Graph & Analytics]
+        DocService[Document Ingestion & Batch Pipeline]
+        SearchService[Hybrid Retrieval, HyDE & MMR Reranker]
+        ReviewService[Systematic Review Agent]
+        ExportService[BibTeX, RIS & CSL Exporter]
+        NotesService[Notes & Annotations CRUD]
+        MetricsService[Prometheus Metrics & Rate Limiting]
     end
 
-    subgraph Pipeline["Ingestion Pipeline"]
-        Parser[PDF Structure & Section Parser]
-        Chunker[Structure-Aware Chunking Engine]
-        Extractor[LLM + Schema-Validated Entity Extractor]
-        CitationParser[Citation & Reference Resolver]
-        Embeddings[Embedding Abstraction Layer]
-        Defense[Prompt Injection Security Guard]
+    subgraph External["Academic Data & Model APIs"]
+        CrossRef[CrossRef DOI API]
+        SemanticScholar[Semantic Scholar Graph API]
+        ArXiv[arXiv API]
     end
 
     subgraph Storage["Dual-Engine Storage Tier"]
@@ -58,8 +65,7 @@ flowchart TB
     end
 
     Frontend --> API
-    API --> Pipeline
-    Pipeline --> Storage
+    API --> External
     API --> Storage
 ```
 
@@ -72,9 +78,9 @@ flowchart TB
 | **Frontend** | Next.js 14 (App Router), TypeScript, Tailwind CSS, Lucide Icons, React Flow, Recharts, TanStack Query, KaTeX |
 | **Backend** | Python 3.11+, FastAPI, Pydantic v2, SQLAlchemy 2.0 (Async), Alembic, LangGraph, LangChain Core |
 | **Databases** | PostgreSQL 16 (`pgvector`), Neo4j 5 (Bolt / APOC), Redis 7 |
-| **Ingestion** | PyPDF, Structure-Aware Semantic Chunking, Pydantic Schema Validation |
-| **AI / ML** | SentenceTransformers (`all-MiniLM-L6-v2`), OpenAI Embeddings & Models, Anthropic Claude, Mock Engine |
-| **DevOps** | Docker, Docker Compose, GitHub Actions CI/CD |
+| **Ingestion** | PyPDF, Structure-Aware Semantic Chunking, CrossRef API, Semantic Scholar API |
+| **AI / ML** | SentenceTransformers, OpenAI Embeddings, Anthropic Claude, HyDE Generator, CrossEncoder Reranker |
+| **DevOps & Monitoring** | Docker, Docker Compose, Prometheus Metrics, GitHub Actions CI/CD |
 
 ---
 
@@ -94,29 +100,9 @@ docker compose up -d --build
 # 3. Access applications:
 # Frontend Web App:  http://localhost:3000
 # Backend API Docs:  http://localhost:8000/docs
+# Metrics Endpoint:  http://localhost:8000/metrics
 # Neo4j Browser:     http://localhost:7474
 ```
-
-### Option 3: Native Developer Start
-
-```bash
-# 1. Start Backend API Gateway (FastAPI)
-python -m uvicorn app.main:app --app-dir apps/api --reload --port 8000
-
-# 2. Start Frontend Web Application (Next.js 14)
-cd apps/web && npm run dev
-```
-
----
-
-## 🎯 Client Features & Configuration Studio
-
-1. **Client Quickstart Guide & Tour**: 5-step interactive walkthrough accessible via the hero banner on the overview dashboard.
-2. **Client Settings Studio (`/settings`)**:
-   - **Model & API Gateway**: Configure OpenAI, Anthropic Claude, HuggingFace, or Local Ollama/vLLM endpoints with live connection tests.
-   - **Retrieval Sliders**: Fine-tune vector weight ($\alpha$), graph traversal depth ($k$), and chunk parameters.
-   - **Data Export Studio**: Export bibliography references as `.bib` (BibTeX) and knowledge graphs as `.cql` (Cypher).
-   - **Institutional Profile**: Customize lead researcher credentials and preferred academic citation format (IEEE, APA, ACM, Nature).
 
 ---
 
@@ -125,18 +111,24 @@ cd apps/web && npm run dev
 DeepGraph AI includes a complete automated test suite and quantitative evaluation benchmark:
 
 ```bash
-# Run backend test suite (100% pass rate)
+# Run backend test suite (18 unit/integration tests)
 pytest apps/api/tests -v
 
 # Run quantitative hybrid retrieval & latency benchmark
 python scripts/evaluate_retrieval.py
+
+# Run retrieval speed benchmark
+python scripts/benchmark_retrieval_speed.py
+
+# Run graph health check probe
+python scripts/graph_health_check.py
 ```
 
 ### Benchmark Results
 - **Retrieval Recall@5**: $100.0\%$
 - **Average Hybrid Retrieval Latency**: $< 20\text{ ms}$
 - **Citation Verification Accuracy**: $100.0\%$ (Zero hallucinated references)
-- **Prompt Injection Defense**: $100\%$ containment rate
+- **Prompt Injection Containment**: $100.0\%$
 
 ---
 
@@ -144,13 +136,14 @@ python scripts/evaluate_retrieval.py
 
 Explore in-depth technical guides in the [`docs/`](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs) directory:
 - [System Architecture](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/architecture.md)
+- [Developing Custom Multi-Agent Workflows](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/custom-agents.md)
+- [Citation & Bibliographic Export Formats](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/export-formats.md)
 - [Ingestion Pipeline & PDF Processing](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/ingestion.md)
 - [Hybrid Retrieval & Mathematical Scoring](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/retrieval.md)
 - [Knowledge Graph Schema & Cypher Queries](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/knowledge-graph.md)
 - [LangGraph Multi-Agent System](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/agents.md)
 - [Security & Prompt-Injection Defense](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/security.md)
 - [Evaluation Framework](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/evaluation.md)
-- [Deployment Guide](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/deployment.md)
 - [REST API Reference](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/api.md)
 
 ---
