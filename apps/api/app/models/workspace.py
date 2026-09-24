@@ -31,3 +31,14 @@ class ResearchNote(Base):
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     workspace = relationship("Workspace", back_populates="notes")
+
+class WorkspacePaper(Base):
+    __tablename__ = "workspace_papers"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    workspace_id = Column(String(36), ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False, index=True)
+    paper_id = Column(String(36), ForeignKey("papers.id", ondelete="CASCADE"), nullable=False, index=True)
+    added_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    workspace = relationship("Workspace")
+    paper = relationship("Paper")

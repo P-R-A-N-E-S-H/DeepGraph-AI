@@ -6,7 +6,9 @@ from app.models.entity import Entity, EntityType
 from app.models.relationship import Relationship, RelationType
 from app.models.citation import Citation
 from app.models.chat import ChatSession, ChatMessage
-from app.models.workspace import Workspace, ResearchNote
+from app.models.workspace import Workspace, ResearchNote, WorkspacePaper
+from app.models.bookmark import Bookmark
+from app.models.annotation import PaperAnnotation
 
 __all__ = [
     "User",
@@ -27,4 +29,7 @@ __all__ = [
     "ChatMessage",
     "Workspace",
     "ResearchNote",
+    "WorkspacePaper",
+    "Bookmark",
+    "PaperAnnotation",
 ]
