@@ -5,6 +5,7 @@ from app.retrieval.vector_store import vector_store
 from app.core.neo4j import in_memory_graph
 from app.schemas.search import SearchResultItem, HybridSearchResponse
 from app.ingestion.entity_extractor import entity_extractor
+from app.retrieval.reranker import cross_encoder_reranker
 from app.core.logging import logger
 
 class HybridRetriever:
@@ -19,7 +20,8 @@ class HybridRetriever:
         top_k: int = 10,
         vector_weight: float = 0.50,
         graph_weight: float = 0.30,
-        metadata_weight: float = 0.20
+        metadata_weight: float = 0.20,
+        enable_rerank: bool = True
     ) -> HybridSearchResponse:
         start_time = time.time()
         
@@ -27,7 +29,7 @@ class HybridRetriever:
         vector_results = await vector_store.search_similar_chunks(
             session=session,
             query=query,
-            top_k=top_k * 2,
+            top_k=top_k * 3,
             document_ids=document_ids
         )
 
@@ -78,14 +80,23 @@ class HybridRetriever:
             )
             combined_results[vr.chunk_id] = item
 
-        # Sort combined results descending by fused score
-        sorted_results = sorted(combined_results.values(), key=lambda x: x.score, reverse=True)[:top_k]
+        # 4. Rerank and Deduplicate with MMR
+        raw_items = list(combined_results.values())
+        if enable_rerank and raw_items:
+            final_results = cross_encoder_reranker.rerank_mmr(
+                query=query,
+                items=raw_items,
+                top_k=top_k
+            )
+        else:
+            final_results = sorted(raw_items, key=lambda x: x.score, reverse=True)[:top_k]
+
         latency_ms = (time.time() - start_time) * 1000.0
 
         return HybridSearchResponse(
             query=query,
-            results=sorted_results,
-            total_found=len(sorted_results),
+            results=final_results,
+            total_found=len(final_results),
             latency_ms=round(latency_ms, 2)
         )
 
