@@ -13,6 +13,7 @@ from app.api.v1.endpoints import (
     workspaces,
     export,
     notes,
+    review,
     health
 )
 
@@ -28,6 +29,7 @@ api_router.include_router(chat.router, prefix="/chat", tags=["Research Chat & Mu
 api_router.include_router(graph.router, prefix="/graph", tags=["Knowledge Graph"])
 api_router.include_router(compare.router, prefix="/compare", tags=["Paper Comparison"])
 api_router.include_router(gaps.router, prefix="/gaps", tags=["Research Gap Discovery"])
+api_router.include_router(review.router, prefix="/review", tags=["Systematic Literature Review"])
 api_router.include_router(analytics.router, prefix="/analytics", tags=["Analytics & Timeline"])
 api_router.include_router(workspaces.router, prefix="/workspaces", tags=["Research Workspaces"])
 api_router.include_router(export.router, prefix="/export", tags=["Citation & Bibliographic Export"])
