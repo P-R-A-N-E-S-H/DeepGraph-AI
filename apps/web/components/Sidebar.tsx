@@ -27,9 +27,11 @@ const navItems = [
   { href: '/chat', label: 'AI Research Assistant', icon: MessageSquare, badge: 'LangGraph' },
   { href: '/graph', label: 'Knowledge Graph', icon: Network, badge: 'React Flow' },
   { href: '/compare', label: 'Paper Comparison', icon: GitCompare },
+  { href: '/reviews', label: 'Systematic Reviews', icon: Sparkles, badge: 'Synthesis' },
   { href: '/gaps', label: 'Research Gaps', icon: Lightbulb, badge: 'Discovery' },
   { href: '/timeline', label: 'Timeline & Evolution', icon: Clock },
-  { href: '/workspaces', label: 'Workspaces & Notes', icon: FolderKanban },
+  { href: '/notes', label: 'Notes & Annotations', icon: FolderKanban, badge: 'New' },
+  { href: '/workspaces', label: 'Workspaces', icon: Database },
   { href: '/settings', label: 'Client Settings', icon: Settings, badge: 'Config' },
 ]
 
