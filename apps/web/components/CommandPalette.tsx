@@ -52,6 +52,30 @@ const STATIC_COMMANDS: CommandItem[] = [
     href: '/compare'
   },
   {
+    id: 'nav-reviews',
+    title: 'Systematic Literature Review',
+    subtitle: 'Automated multi-paper meta-analysis and taxonomy synthesis',
+    category: 'Actions',
+    icon: Sparkles,
+    href: '/reviews'
+  },
+  {
+    id: 'nav-notes',
+    title: 'Research Notes & Annotations',
+    subtitle: 'Manage literature notes, highlights, and bookmarks',
+    category: 'Actions',
+    icon: FileText,
+    href: '/notes'
+  },
+  {
+    id: 'nav-timeline',
+    title: 'Timeline & Evolution',
+    subtitle: 'Track chronological milestones and citation lineage',
+    category: 'Navigation',
+    icon: Network,
+    href: '/timeline'
+  },
+  {
     id: 'nav-gaps',
     title: 'Discover Research Gaps',
     subtitle: 'Explore limitations, open problems and frontiers',
