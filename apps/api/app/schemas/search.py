@@ -19,6 +19,8 @@ class SearchQueryRequest(BaseModel):
     vector_weight: float = 0.50
     graph_weight: float = 0.30
     metadata_weight: float = 0.20
+    use_hyde: bool = False
+    expand_query: bool = False
 
 class SearchResultItem(BaseModel):
     chunk_id: str
