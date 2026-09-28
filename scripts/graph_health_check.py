@@ -6,8 +6,34 @@ import networkx as nx
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "apps", "api")))
 
 from app.core.neo4j import in_memory_graph
+from app.core.database import AsyncSessionLocal, init_db
+from app.models.paper import Paper
+from app.models.entity import Entity
+from app.models.relationship import Relationship
+from sqlalchemy import select
+import asyncio
 
-def run_health_check():
+async def populate_graph_from_db():
+    await init_db()
+    async with AsyncSessionLocal() as session:
+        papers = (await session.execute(select(Paper))).scalars().all()
+        for p in papers:
+            in_memory_graph.add_node(p.id, label="Paper", properties={"name": p.title, "title": p.title, "year": p.year or 2024})
+        
+        entities = (await session.execute(select(Entity))).scalars().all()
+        for e in entities:
+            in_memory_graph.add_node(e.id, label=e.type, properties={"name": e.name})
+            if e.paper_id:
+                in_memory_graph.add_edge(e.paper_id, e.id, relation="MENTIONS")
+
+        relations = (await session.execute(select(Relationship))).scalars().all()
+        for r in relations:
+            in_memory_graph.add_edge(r.source_entity_id, r.target_entity_id, relation=r.relation_type)
+
+async def run_health_check_async():
+    if in_memory_graph.graph.number_of_nodes() == 0:
+        await populate_graph_from_db()
+
     print("==================================================")
     print("      DeepGraph AI - Knowledge Graph Health Probe ")
     print("==================================================")
@@ -55,4 +81,4 @@ def run_health_check():
     print("==================================================")
 
 if __name__ == "__main__":
-    run_health_check()
+    asyncio.run(run_health_check_async())
