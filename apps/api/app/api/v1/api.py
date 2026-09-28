@@ -14,7 +14,10 @@ from app.api.v1.endpoints import (
     export,
     notes,
     review,
-    health
+    health,
+    podcast,
+    citations,
+    verify
 )
 
 api_router = APIRouter()
@@ -34,3 +37,6 @@ api_router.include_router(analytics.router, prefix="/analytics", tags=["Analytic
 api_router.include_router(workspaces.router, prefix="/workspaces", tags=["Research Workspaces"])
 api_router.include_router(export.router, prefix="/export", tags=["Citation & Bibliographic Export"])
 api_router.include_router(notes.router, prefix="/notes", tags=["Research Notes & Annotations"])
+api_router.include_router(podcast.router, prefix="/podcast", tags=["Audio Briefings & Podcasts"])
+api_router.include_router(citations.router, prefix="/citations", tags=["Citation & Bibliographic Network"])
+api_router.include_router(verify.router, prefix="/verify", tags=["Fact-Checking & Claim Verification"])

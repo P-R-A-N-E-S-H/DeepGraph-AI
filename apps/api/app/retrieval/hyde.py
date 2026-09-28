@@ -26,7 +26,7 @@ class HyDEGenerator:
         )
 
         try:
-            hypothetical = await llm_service.generate_text(prompt=prompt, model=model)
+            hypothetical = await llm_service.generate(prompt=prompt)
             if hypothetical and len(hypothetical.strip()) > 30:
                 return hypothetical.strip()
         except Exception as e:
