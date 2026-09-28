@@ -1,0 +1,224 @@
+{
+  "episode_id": "7923c204-824e-4822-96fc-c65002e9320d",
+  "title": "Deep Dive: Vision Transformers vs Residual Networks",
+  "subtitle": "An interactive technical discussion hosted by Dr. Aris & Dr. Nova",
+  "paper_ids": [
+    "b441fa33-fc3a-4ebd-aad7-f687b442eb1c",
+    "9bb816be-c18d-42ea-b88d-a794060cc069",
+    "3919071d-dc74-401c-87bc-e5ca17f51006",
+    "944473be-7a45-4e18-be57-46cd1ccbab5f",
+    "050a226f-e05f-4afd-8ebc-73076caaec4f"
+  ],
+  "paper_titles": [
+    "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+    "Deep Residual Learning for Image Recognition",
+    "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+    "Deep Residual Learning for Image Recognition",
+    "Seed 2010.11929"
+  ],
+  "total_duration_estimate_seconds": 345,
+  "chapters": [
+    {
+      "title": "1. The Problem Framing & Motivation",
+      "start_seconds": 0.0,
+      "start_formatted": "00:00",
+      "summary": "Introduction to Vision Transformers vs Residual Networks and why traditional approaches hit empirical limits."
+    },
+    {
+      "title": "2. Architectural Breakdown & Mechanism",
+      "start_seconds": 90.0,
+      "start_formatted": "01:30",
+      "summary": "Deconstructing the core mechanism, mathematical formulation, and layer dynamics."
+    },
+    {
+      "title": "3. Empirical Benchmarks & Trade-offs",
+      "start_seconds": 180.0,
+      "start_formatted": "03:00",
+      "summary": "Evaluation results on standard benchmarks, computational cost, and scaling limits."
+    },
+    {
+      "title": "4. Critical Limitations & The Open Horizon",
+      "start_seconds": 270.0,
+      "start_formatted": "04:30",
+      "summary": "Where the methodology breaks down and what future research must address."
+    }
+  ],
+  "dialogue": [
+    {
+      "turn_id": 1,
+      "speaker": "Dr. Aris",
+      "speaker_title": "Senior Research Host",
+      "text": "Welcome back to DeepGraph Research Briefings! Today, we're unpacking a really foundational topic: Vision Transformers vs Residual Networks. Nova, researchers have spent years wrestling with representations in this exact space. What made this work such a turning point?",
+      "timestamp_formatted": "00:00",
+      "timestamp_seconds": 0.0,
+      "tone": "enthusiastic",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 2,
+      "speaker": "Dr. Nova",
+      "speaker_title": "Principal Research Scientist & Critic",
+      "text": "Thanks Aris. It really comes down to inductive biases versus raw scaling capacity. For over a decade, standard architectures baked in strict geometric assumptions. This research asks: what happens if you strip away hand-crafted priors and let global self-attention learn relationships directly from data?",
+      "timestamp_formatted": "00:18",
+      "timestamp_seconds": 18.0,
+      "tone": "analytical",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 3,
+      "speaker": "Dr. Aris",
+      "speaker_title": "Senior Research Host",
+      "text": "And that was considered risky at the time, right? Because without spatial priors or convolutional locality, you theoretically need vastly more training signals to prevent catastrophic overfitting.",
+      "timestamp_formatted": "00:38",
+      "timestamp_seconds": 38.0,
+      "tone": "curious",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 4,
+      "speaker": "Dr. Nova",
+      "speaker_title": "Principal Research Scientist & Critic",
+      "text": "Exactly! That's the crux of the empirical findings. When trained on modest datasets like ImageNet-1K, these models actually lagged behind well-tuned residual networks by several percentage points. The breakthrough only appeared when pretraining at scale—hundreds of millions of images.",
+      "timestamp_formatted": "00:56",
+      "timestamp_seconds": 56.0,
+      "tone": "critical",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 5,
+      "speaker": "Dr. Aris",
+      "speaker_title": "Senior Research Host",
+      "text": "Let's zoom into the actual architecture. How is the input structured? They're splitting inputs into non-overlapping patches, correct?",
+      "timestamp_formatted": "01:30",
+      "timestamp_seconds": 90.0,
+      "tone": "explanatory",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 6,
+      "speaker": "Dr. Nova",
+      "speaker_title": "Principal Research Scientist & Critic",
+      "text": "Yes! Each patch is linearly projected into an embedding vector, combined with learnable 1D position embeddings. From that point onward, the entire network treats visual patches exactly like tokens in a sequence-to-sequence transformer.",
+      "timestamp_formatted": "01:52",
+      "timestamp_seconds": 112.0,
+      "tone": "analytical",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 7,
+      "speaker": "Dr. Aris",
+      "speaker_title": "Senior Research Host",
+      "text": "That's remarkably elegant. But what about the computational cost? Standard multi-head self-attention scales quadratically with patch count.",
+      "timestamp_formatted": "02:15",
+      "timestamp_seconds": 135.0,
+      "tone": "critical",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 8,
+      "speaker": "Dr. Nova",
+      "speaker_title": "Principal Research Scientist & Critic",
+      "text": "That is the elephant in the room! The memory footprint grows as O(N^2). For high-resolution inputs—like dense segmentation or medical imagery—that quadratic wall becomes punishing without hierarchical windowing or linear attention variants.",
+      "timestamp_formatted": "02:35",
+      "timestamp_seconds": 155.0,
+      "tone": "analytical",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 9,
+      "speaker": "Dr. Aris",
+      "speaker_title": "Senior Research Host",
+      "text": "Looking at the benchmark numbers, where did this architecture achieve its most decisive wins?",
+      "timestamp_formatted": "03:00",
+      "timestamp_seconds": 180.0,
+      "tone": "curious",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 10,
+      "speaker": "Dr. Nova",
+      "speaker_title": "Principal Research Scientist & Critic",
+      "text": "Top-1 accuracy on ImageNet reached over 88.5%, with significantly lower pretraining compute compared to previous convolutional giants. Furthermore, the learned attention rollout weights showed clear semantic segmentation emerging without any explicit pixel-level supervision!",
+      "timestamp_formatted": "03:22",
+      "timestamp_seconds": 202.0,
+      "tone": "enthusiastic",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 11,
+      "speaker": "Dr. Aris",
+      "speaker_title": "Senior Research Host",
+      "text": "So where does the research community go from here? What are the biggest remaining gaps?",
+      "timestamp_formatted": "04:30",
+      "timestamp_seconds": 270.0,
+      "tone": "curious",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 12,
+      "speaker": "Dr. Nova",
+      "speaker_title": "Principal Research Scientist & Critic",
+      "text": "Two major frontiers: first, sample efficiency—reducing the data hunger so researchers don't need industrial-scale clusters. And second, hybrid tokenization: blending local convolutional filters at early stages with global attention in deeper layers.",
+      "timestamp_formatted": "04:50",
+      "timestamp_seconds": 290.0,
+      "tone": "analytical",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    },
+    {
+      "turn_id": 13,
+      "speaker": "Dr. Aris",
+      "speaker_title": "Senior Research Host",
+      "text": "A fascinating balance between mathematical elegance and computational reality. Thank you Nova, and thank you to everyone exploring knowledge graphs with DeepGraph AI. Until next time!",
+      "timestamp_formatted": "05:15",
+      "timestamp_seconds": 315.0,
+      "tone": "enthusiastic",
+      "citations": [
+        "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
+        "Deep Residual Learning for Image Recognition"
+      ]
+    }
+  ],
+  "key_takeaways": [
+    "Global self-attention replaces local inductive biases, trading sample efficiency for unbounded scaling potential.",
+    "Pretraining scale is essential: performance eclipses CNNs only when pretraining data exceeds tens of millions of samples.",
+    "Quadratic computational complexity O(N^2) in sequence length remains the primary operational bottleneck for high-resolution tasks.",
+    "Hybrid architectures combining early convolution stems with deep attention blocks provide optimal compute-accuracy frontiers."
+  ],
+  "generated_at": "2026-09-28T18:34:52.436120Z"
+}
