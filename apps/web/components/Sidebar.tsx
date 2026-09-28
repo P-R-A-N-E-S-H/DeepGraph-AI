@@ -17,7 +17,9 @@ import {
   ChevronRight,
   Database,
   Cpu,
-  Settings
+  Settings,
+  Headphones,
+  Share2
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -25,7 +27,9 @@ const navItems = [
   { href: '/', label: 'Overview', icon: LayoutDashboard },
   { href: '/documents', label: 'Document Library', icon: FileText, badge: 'PDF & arXiv' },
   { href: '/chat', label: 'AI Research Assistant', icon: MessageSquare, badge: 'LangGraph' },
+  { href: '/podcasts', label: 'Audio Briefings', icon: Headphones, badge: 'Podcast' },
   { href: '/graph', label: 'Knowledge Graph', icon: Network, badge: 'React Flow' },
+  { href: '/citations', label: 'Citation Network', icon: Share2, badge: 'Analysis' },
   { href: '/compare', label: 'Paper Comparison', icon: GitCompare },
   { href: '/reviews', label: 'Systematic Reviews', icon: Sparkles, badge: 'Synthesis' },
   { href: '/gaps', label: 'Research Gaps', icon: Lightbulb, badge: 'Discovery' },

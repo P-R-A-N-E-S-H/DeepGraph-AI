@@ -9,7 +9,7 @@ export interface ReviewSection {
 export interface SystematicReviewResponse {
   title: string
   topic: string
-  paper_count: int
+  paper_count: number
   executive_summary: string
   taxonomies: Array<{
     cluster_name: string

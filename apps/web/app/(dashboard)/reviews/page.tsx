@@ -15,7 +15,6 @@ import {
   Check
 } from 'lucide-react'
 import { reviewService, SystematicReviewResponse } from '@/services/review'
-import ReactMarkdown from 'react-markdown'
 
 export default function ReviewsPage() {
   const [topic, setTopic] = useState('Graph Retrieval-Augmented Generation (Graph-RAG) in Technical Problem Solving')

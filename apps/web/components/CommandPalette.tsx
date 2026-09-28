@@ -36,12 +36,28 @@ const STATIC_COMMANDS: CommandItem[] = [
     href: '/chat'
   },
   {
+    id: 'nav-podcasts',
+    title: 'Audio Briefings & Research Podcast',
+    subtitle: 'Interactive multi-speaker audio breakdowns and TTS player',
+    category: 'Actions',
+    icon: Sparkles,
+    href: '/podcasts'
+  },
+  {
     id: 'nav-graph',
     title: 'Explore Knowledge Graph',
     subtitle: 'Interactive React Flow visualizer',
     category: 'Navigation',
     icon: Network,
     href: '/graph'
+  },
+  {
+    id: 'nav-citations',
+    title: 'Citation Network & Bibliographic Coupling',
+    subtitle: 'Analyze co-citation clusters, HITS influence, and shared methods',
+    category: 'Navigation',
+    icon: Network,
+    href: '/citations'
   },
   {
     id: 'nav-compare',
