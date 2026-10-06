@@ -101,3 +101,22 @@ async def enrich_paper_metadata(paper_id: str, db: AsyncSession = Depends(get_db
     await db.commit()
     await db.refresh(paper)
     return {"message": "Paper enriched successfully", "paper_id": paper.id, "enrichment": enriched}
+
+@router.get("/search-external/query")
+async def search_external_papers(
+    query: str,
+    source: str = "all",
+    limit: int = 10
+):
+    """
+    Search live academic preprints and publications directly on arXiv and PubMed.
+    """
+    from app.ingestion.live_fetchers import LivePaperFetcher
+    results = await LivePaperFetcher.search_all(query=query, source=source, max_results=limit)
+    return {
+        "query": query,
+        "source": source,
+        "total": len(results),
+        "papers": results
+    }
+
