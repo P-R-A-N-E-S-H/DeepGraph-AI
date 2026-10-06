@@ -120,3 +120,12 @@ async def search_external_papers(
         "papers": results
     }
 
+@router.get("/{paper_id}/methodology")
+async def get_paper_methodology(paper_id: str, db: AsyncSession = Depends(get_db)):
+    """
+    Extract structured methodology, datasets, baselines, and hardware hyperparameters from a paper.
+    """
+    from app.agents.methodology_agent import methodology_extractor
+    return await methodology_extractor.extract_methodology(db, paper_id)
+
+
