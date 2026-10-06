@@ -14,7 +14,7 @@ async def hybrid_search(payload: SearchQueryRequest, db: AsyncSession = Depends(
     if payload.use_hyde:
         effective_query = await hyde_generator.generate_hypothetical_passage(payload.query)
 
-    return await hybrid_retriever.retrieve(
+    response = await hybrid_retriever.retrieve(
         session=db,
         query=effective_query,
         workspace_id=payload.workspace_id,
@@ -24,6 +24,19 @@ async def hybrid_search(payload: SearchQueryRequest, db: AsyncSession = Depends(
         graph_weight=payload.graph_weight,
         metadata_weight=payload.metadata_weight
     )
+
+    if payload.use_rrf and response.results:
+        from app.retrieval.hybrid_rrf import rrf_fusion_reranker
+        fused = rrf_fusion_reranker.fuse_rankings(
+            query=effective_query,
+            dense_results=response.results,
+            top_k=payload.top_k
+        )
+        response.results = fused
+        response.total_found = len(fused)
+
+    return response
+
 
 @router.post("/expand-query")
 async def expand_query(query: str):

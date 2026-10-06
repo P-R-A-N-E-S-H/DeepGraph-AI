@@ -20,7 +20,9 @@ class SearchQueryRequest(BaseModel):
     graph_weight: float = 0.30
     metadata_weight: float = 0.20
     use_hyde: bool = False
+    use_rrf: bool = False
     expand_query: bool = False
+
 
 class SearchResultItem(BaseModel):
     chunk_id: str
