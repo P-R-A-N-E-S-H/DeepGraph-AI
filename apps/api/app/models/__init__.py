@@ -9,6 +9,7 @@ from app.models.chat import ChatSession, ChatMessage
 from app.models.workspace import Workspace, ResearchNote, WorkspacePaper
 from app.models.bookmark import Bookmark
 from app.models.annotation import PaperAnnotation
+from app.models.tags import Tag, paper_tags
 
 __all__ = [
     "User",
@@ -32,4 +33,7 @@ __all__ = [
     "WorkspacePaper",
     "Bookmark",
     "PaperAnnotation",
+    "Tag",
+    "paper_tags",
 ]
+
