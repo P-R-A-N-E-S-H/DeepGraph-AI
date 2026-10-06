@@ -19,25 +19,33 @@ import {
   Cpu,
   Settings,
   Headphones,
-  Share2
+  Share2,
+  Globe,
+  FileCode,
+  Users
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navItems = [
   { href: '/', label: 'Overview', icon: LayoutDashboard },
+  { href: '/discover', label: 'Live Discover', icon: Globe, badge: 'arXiv/PubMed' },
   { href: '/documents', label: 'Document Library', icon: FileText, badge: 'PDF & arXiv' },
   { href: '/chat', label: 'AI Research Assistant', icon: MessageSquare, badge: 'LangGraph' },
   { href: '/podcasts', label: 'Audio Briefings', icon: Headphones, badge: 'Podcast' },
   { href: '/graph', label: 'Knowledge Graph', icon: Network, badge: 'React Flow' },
-  { href: '/citations', label: 'Citation Network', icon: Share2, badge: 'Analysis' },
+  { href: '/citations', label: 'Citation Network', icon: Share2, badge: 'Coupling' },
+  { href: '/collaborations', label: 'Co-Authorship', icon: Users, badge: 'Labs' },
   { href: '/compare', label: 'Paper Comparison', icon: GitCompare },
+  { href: '/methodologies', label: 'Methodology Matrix', icon: Cpu, badge: 'Benchmarks' },
   { href: '/reviews', label: 'Systematic Reviews', icon: Sparkles, badge: 'Synthesis' },
+  { href: '/latex', label: 'LaTeX Studio', icon: FileCode, badge: 'Drafts' },
   { href: '/gaps', label: 'Research Gaps', icon: Lightbulb, badge: 'Discovery' },
   { href: '/timeline', label: 'Timeline & Evolution', icon: Clock },
-  { href: '/notes', label: 'Notes & Annotations', icon: FolderKanban, badge: 'New' },
+  { href: '/notes', label: 'Notes & Annotations', icon: FolderKanban, badge: 'Tags' },
   { href: '/workspaces', label: 'Workspaces', icon: Database },
   { href: '/settings', label: 'Client Settings', icon: Settings, badge: 'Config' },
 ]
+
 
 export default function Sidebar() {
   const pathname = usePathname()
