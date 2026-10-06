@@ -21,4 +21,5 @@ class Tag(Base):
     category = Column(String(50), default="General", index=True) # e.g. "Methodology", "Priority", "Domain"
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    papers = relationship("Paper", secondary=paper_tags, backref="tags")
+    papers = relationship("Paper", secondary=paper_tags, back_populates="tags")
+

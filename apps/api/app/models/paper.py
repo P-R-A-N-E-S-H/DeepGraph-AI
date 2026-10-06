@@ -38,5 +38,7 @@ class Paper(Base):
     # Relationships
     document = relationship("Document", back_populates="paper")
     authors = relationship("Author", secondary=paper_authors, back_populates="papers")
+    tags = relationship("Tag", secondary="paper_tags", back_populates="papers")
     entities = relationship("Entity", back_populates="paper", cascade="all, delete-orphan")
     citations = relationship("Citation", back_populates="source_paper", foreign_keys="Citation.source_paper_id", cascade="all, delete-orphan")
+

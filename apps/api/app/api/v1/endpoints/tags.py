@@ -129,14 +129,15 @@ async def assign_tags_to_paper(
     tags = t_res.scalars().all()
 
     paper.tags = list(tags)
+    title = paper.title
     await db.commit()
-    await db.refresh(paper)
 
     return {
-        "message": f"Updated tags for paper {paper.title}",
+        "message": f"Updated tags for paper {title}",
         "paper_id": paper_id,
-        "tags": [{"id": t.id, "name": t.name, "color": t.color} for t in paper.tags]
+        "tags": [{"id": t.id, "name": t.name, "color": t.color} for t in tags]
     }
+
 
 @router.get("/paper/{paper_id}", response_model=List[TagResponse])
 async def get_paper_tags(paper_id: str, db: AsyncSession = Depends(get_db)):
