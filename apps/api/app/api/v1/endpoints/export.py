@@ -118,3 +118,16 @@ async def export_single_formatted(
         "bibtex": bibtex,
         "ris": ris
     }
+
+@router.post("/latex")
+async def export_latex_draft(
+    payload: dict,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Generate compile-ready LaTeX section and companion BibTeX file for selected research papers.
+    """
+    from app.agents.latex_generator import latex_generator_agent, LatexDraftRequest
+    req = LatexDraftRequest(**payload)
+    return await latex_generator_agent.generate_latex_draft(db, req)
+
