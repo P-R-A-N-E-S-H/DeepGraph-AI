@@ -34,3 +34,14 @@ async def get_shortest_path(
     target_id: str = Query(..., description="Target node ID")
 ):
     return await graph_service.get_shortest_path(source_id, target_id)
+
+@router.get("/coauthorship")
+async def get_coauthorship_network():
+    """
+    Analyze co-authorship networks, research lab communities, and author centrality metrics.
+    """
+    from app.core.database import AsyncSessionLocal
+    from app.graph.coauthorship import coauthorship_analyzer
+    async with AsyncSessionLocal() as session:
+        return await coauthorship_analyzer.analyze_coauthorship(session)
+
