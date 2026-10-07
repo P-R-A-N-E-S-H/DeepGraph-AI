@@ -19,7 +19,8 @@ from app.api.v1.endpoints import (
     citations,
     verify,
     tags,
-    code_extract
+    code_extract,
+    meta_analysis
 )
 
 api_router = APIRouter()
@@ -44,5 +45,7 @@ api_router.include_router(citations.router, prefix="/citations", tags=["Citation
 api_router.include_router(verify.router, prefix="/verify", tags=["Fact-Checking & Claim Verification"])
 api_router.include_router(tags.router, prefix="/tags", tags=["Paper Tags & Classification"])
 api_router.include_router(code_extract.router, prefix="/code", tags=["Code & Repository Extraction"])
+api_router.include_router(meta_analysis.router, prefix="/meta-analysis", tags=["Meta-Analysis & Forest Plots"])
+
 
 
