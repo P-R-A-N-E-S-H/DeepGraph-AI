@@ -1,0 +1,29 @@
+groups:
+  - name: deepgraph_alerts
+    rules:
+      - alert: HighHybridRetrievalLatency
+        expr: deepgraph_request_latency_seconds_bucket{le="0.5"} < 0.95
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High hybrid retrieval latency detected"
+          description: "Over 5% of hybrid vector/graph queries are taking longer than 500ms."
+
+      - alert: PromptInjectionDetected
+        expr: increase(deepgraph_security_prompt_defense_triggers_total[5m]) > 5
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Multiple prompt injection attempts detected"
+          description: "More than 5 prompt injection attacks intercepted within the last 5 minutes."
+
+      - alert: DatabaseConnectionFailure
+        expr: deepgraph_database_healthy == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database connection failed"
+          description: "API gateway cannot reach PostgreSQL / pgvector or Neo4j storage engine."
