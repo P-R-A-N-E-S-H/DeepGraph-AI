@@ -21,7 +21,9 @@ class SearchQueryRequest(BaseModel):
     metadata_weight: float = 0.20
     use_hyde: bool = False
     use_rrf: bool = False
+    compress_context: bool = False
     expand_query: bool = False
+
 
 
 class SearchResultItem(BaseModel):

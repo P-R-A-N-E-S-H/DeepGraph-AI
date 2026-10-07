@@ -35,6 +35,10 @@ async def hybrid_search(payload: SearchQueryRequest, db: AsyncSession = Depends(
         response.results = fused
         response.total_found = len(fused)
 
+    if payload.compress_context and response.results:
+        from app.retrieval.context_compressor import context_compressor
+        response.results = context_compressor.compress_all(effective_query, response.results)
+
     return response
 
 
@@ -47,3 +51,12 @@ async def expand_query(query: str):
         "expanded_queries": expanded,
         "hypothetical_abstract": hypothetical
     }
+
+@router.post("/decompose")
+async def decompose_query_plan(query: str):
+    """
+    Decompose a multi-faceted research question into targeted atomic sub-queries.
+    """
+    from app.retrieval.query_decomposer import query_decomposer
+    return query_decomposer.decompose(query)
+
