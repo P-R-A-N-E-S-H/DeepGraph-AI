@@ -10,6 +10,7 @@ from app.models.workspace import Workspace, ResearchNote, WorkspacePaper
 from app.models.bookmark import Bookmark
 from app.models.annotation import PaperAnnotation
 from app.models.tags import Tag, paper_tags
+from app.models.rubric import PeerReviewScorecard
 
 __all__ = [
     "User",
@@ -35,5 +36,7 @@ __all__ = [
     "PaperAnnotation",
     "Tag",
     "paper_tags",
+    "PeerReviewScorecard",
 ]
+
 
