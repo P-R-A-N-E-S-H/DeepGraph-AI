@@ -21,7 +21,8 @@ from app.api.v1.endpoints import (
     tags,
     code_extract,
     meta_analysis,
-    trends
+    trends,
+    triplets
 )
 
 api_router = APIRouter()
@@ -48,6 +49,8 @@ api_router.include_router(tags.router, prefix="/tags", tags=["Paper Tags & Class
 api_router.include_router(code_extract.router, prefix="/code", tags=["Code & Repository Extraction"])
 api_router.include_router(meta_analysis.router, prefix="/meta-analysis", tags=["Meta-Analysis & Forest Plots"])
 api_router.include_router(trends.router, prefix="/trends", tags=["Citation Velocity & Research Trends"])
+api_router.include_router(triplets.router, prefix="/triplets", tags=["Knowledge Graph Triplets"])
+
 
 
 
