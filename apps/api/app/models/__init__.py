@@ -11,6 +11,7 @@ from app.models.bookmark import Bookmark
 from app.models.annotation import PaperAnnotation
 from app.models.tags import Tag, paper_tags
 from app.models.rubric import PeerReviewScorecard
+from app.models.history import PaperReadingHistory
 
 __all__ = [
     "User",
@@ -37,6 +38,8 @@ __all__ = [
     "Tag",
     "paper_tags",
     "PeerReviewScorecard",
+    "PaperReadingHistory",
 ]
+
 
 
