@@ -22,7 +22,11 @@ import {
   Share2,
   Globe,
   FileCode,
-  Users
+  Users,
+  Code2,
+  BarChart3,
+  TrendingUp,
+  Award
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -33,11 +37,16 @@ const navItems = [
   { href: '/chat', label: 'AI Research Assistant', icon: MessageSquare, badge: 'LangGraph' },
   { href: '/podcasts', label: 'Audio Briefings', icon: Headphones, badge: 'Podcast' },
   { href: '/graph', label: 'Knowledge Graph', icon: Network, badge: 'React Flow' },
+  { href: '/triplets', label: 'Graph Triplets', icon: Share2, badge: 'Ontology' },
   { href: '/citations', label: 'Citation Network', icon: Share2, badge: 'Coupling' },
   { href: '/collaborations', label: 'Co-Authorship', icon: Users, badge: 'Labs' },
+  { href: '/trends', label: 'Citation Velocity', icon: TrendingUp, badge: 'Breakouts' },
   { href: '/compare', label: 'Paper Comparison', icon: GitCompare },
   { href: '/methodologies', label: 'Methodology Matrix', icon: Cpu, badge: 'Benchmarks' },
+  { href: '/meta-analysis', label: 'Meta-Analysis', icon: BarChart3, badge: 'Forest Plot' },
   { href: '/reviews', label: 'Systematic Reviews', icon: Sparkles, badge: 'Synthesis' },
+  { href: '/rubrics', label: 'Peer Review Studio', icon: Award, badge: 'Rubric' },
+  { href: '/code', label: 'Code & Repositories', icon: Code2, badge: 'PyTorch' },
   { href: '/latex', label: 'LaTeX Studio', icon: FileCode, badge: 'Drafts' },
   { href: '/gaps', label: 'Research Gaps', icon: Lightbulb, badge: 'Discovery' },
   { href: '/timeline', label: 'Timeline & Evolution', icon: Clock },
@@ -45,6 +54,7 @@ const navItems = [
   { href: '/workspaces', label: 'Workspaces', icon: Database },
   { href: '/settings', label: 'Client Settings', icon: Settings, badge: 'Config' },
 ]
+
 
 
 export default function Sidebar() {
