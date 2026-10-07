@@ -10,7 +10,7 @@
 [![Neo4j Graph](https://img.shields.io/badge/Neo4j-5.0-008CC1.svg?logo=neo4j)](https://neo4j.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-DeepGraph AI is a production-grade research intelligence platform engineered to transform dense scientific papers, technical reports, and arXiv preprints into an interconnected knowledge graph with hybrid vector-graph semantic retrieval, citation-verified multi-agent reasoning, and interactive multi-speaker audio briefings.
+DeepGraph AI is a production-grade research intelligence platform engineered to transform dense scientific papers, technical reports, and arXiv preprints into an interconnected knowledge graph with hybrid vector-graph semantic retrieval, citation-verified multi-agent reasoning, interactive multi-speaker audio briefings, statistical meta-analyses, and peer review studios.
 
 ---
 
@@ -18,12 +18,18 @@ DeepGraph AI is a production-grade research intelligence platform engineered to 
 
 - **🎙️ Research Audio Briefings & Podcast Studio**: NotebookLM-style interactive multi-host research podcasts (Dr. Aris & Dr. Nova) breaking down papers, mathematical intuition, and architectural edge cases with client-side Web Speech TTS playback and Markdown/JSON export.
 - **🌐 Live arXiv & PubMed Academic Explorer**: Search millions of global preprints live via official arXiv Atom and NCBI E-utilities with 1-click knowledge graph ingestion and automated metadata extraction.
+- **📊 Statistical Meta-Analysis & Forest Plot Studio**: Synthesizes standardized effect sizes (Cohen's $d$), inverse-variance weighting, Cochran's $Q$, and Higgins $I^2$ heterogeneity metrics across experimental literature.
+- **🚀 Citation Velocity & Trend Acceleration Radar**: Computes temporal citation momentum derivatives, breakout star indicators, and 12-month trajectory projections.
+- **💻 Code & Repository Extraction Explorer**: Extracts linked GitHub/HuggingFace repositories, framework dependencies, licenses, and executable PyTorch model definitions.
+- **🕸️ Knowledge Graph Triplets & Ontology Explorer**: Extracts structured `(Subject, Predicate, Object)` relations (`PROPOSES_METHOD`, `EVALUATED_ON`, `OUTPERFORMS`, `ADDRESSES_PROBLEM`) with calibrated edge confidence.
+- **⭐ Standardized Peer Review Scorecards**: Multi-criteria peer evaluation studio scoring Originality, Empirical Soundness, Clarity, Impact, and Reproducibility with overall recommendations.
 - **🔗 Citation Network & Bibliographic Coupling**: Automated bibliometric analysis calculating shared methodologies, co-citation clusters, HITS authority scores, PageRank, and landmark seed detection.
 - **👥 Co-Authorship & Institutional Lab Analysis**: Evaluates researcher collaboration networks, institutional clustering, author centrality, and prolificacy tiers.
 - **📊 Methodology & Benchmark Extraction Matrix**: Automated extraction of experimental setups, evaluated datasets (splits/domains), baseline architectures, evaluation metrics, compute infrastructure (GPUs/hours), and documented limitations.
 - **📝 LaTeX Paper Draft & Export Studio**: Side-by-side compile-ready LaTeX literature review draft generator (`\section{Related Work}`, `\begin{table*}`) with companion `.bib` citation bundles.
 - **🏷️ Paper Reading Lists & Tagging Classification**: Organize literature into multi-tier reading lists with customizable tag badges, categories, and color codes.
 - **⚡ BM25 + Dense Hybrid Reciprocal Rank Fusion (RRF)**: Calibrated consensus search fusing dense vector similarity, lexical BM25 token frequencies, and graph entity neighborhoods ($k=60$).
+- **✂️ Contextual Chunk Compression**: Semantic sentence trimmer stripping noisy boilerplate and maximizing factual prompt density.
 - **⚖️ Automated Claim Verification & Fact Checking**: Evidence-grounded consensus evaluation determining if scientific assertions are `SUPPORTED`, `REFUTED`, or `NUANCED` against indexed literature.
 - **📄 Intelligent Structure-Aware Ingestion**: Automatically segments PDFs into Abstract, Introduction, Related Work, Methodology, Experiments, Results, Discussion, and References while preserving exact page and section provenance.
 - **🔍 Hybrid Vector + Knowledge Graph Retrieval**: Fuses dense pgvector embeddings ($w=0.50$) with Neo4j entity neighborhood traversals ($w=0.30$), metadata filtering ($w=0.20$), and Maximal Marginal Relevance (MMR) deduplication.
@@ -36,10 +42,9 @@ DeepGraph AI is a production-grade research intelligence platform engineered to 
 - **🛡️ Strict Citation Verification**: 100% citation grounding guarantee. Every factual claim is validated against retrieved chunks; ungrounded assertions are strictly suppressed.
 - **📊 Multi-Paper Comparative Matrix**: Synthesizes side-by-side matrices across research problems, architectures, benchmark datasets, evaluation metrics, computational costs, and reported limitations.
 - **💡 Research Gap & Open Frontier Discovery**: Detects contradictions, computational bottlenecks, and unaddressed scientific challenges across publications.
-- **🕸️ Interactive Knowledge Graph Canvas**: Visualizes papers, models, datasets, methods, and metrics with React Flow, node type filters, and community overlays.
 - **⏱️ Research Timeline & Evolution Visualizer**: Chronological trajectory of model architectures, benchmark datasets, and breakthrough methodologies.
 - **📊 Prometheus Metrics Exporter & Token Bucket Rate Limiter**: Production observability via `/metrics` with sliding-window API abuse protection.
-- **🔒 Enterprise Prompt-Injection Defense**: Isolates untrusted document text behind `<UNTRUSTED_RESEARCH_DOCUMENT_EVIDENCE>` security boundaries with PII redaction.
+- **🔒 Enterprise Prompt-Injection Defense**: Isolates untrusted document text behind `<UNTRUSTED_RESEARCH_DOCUMENT_EVIDENCE>` security boundaries with PII redaction and audit logging.
 
 ---
 
@@ -51,6 +56,11 @@ flowchart TB
         Overview[Research Dashboard]
         DiscoverUI[Live arXiv & PubMed Explorer]
         PodcastsUI[Audio Briefings & Podcast Studio]
+        MetaAnalysisUI[Statistical Meta-Analysis & Forest Plots]
+        TrendsUI[Citation Velocity & Trend Acceleration]
+        CodeUI[Code & Repository Explorer]
+        TripletsUI[KG Triplets & Ontology Explorer]
+        RubricsUI[Peer Review Scorecard Studio]
         CitationsUI[Citation Network & Coupling Explorer]
         CoAuthorUI[Co-Authorship & Lab Networks]
         MethodologyUI[Methodology & Benchmark Matrix]
@@ -68,7 +78,12 @@ flowchart TB
         AuthService[JWT & RBAC Auth Middleware]
         DocService[Document Ingestion & Batch Pipeline]
         LiveSearchService[Live arXiv & PubMed Fetcher]
-        SearchService[Hybrid Retrieval, HyDE & RRF Reranker]
+        SearchService[Hybrid Retrieval, HyDE, RRF & Compression]
+        MetaService[Meta-Analysis Forest Plot Agent]
+        TrendsService[Citation Velocity & Derivatives Engine]
+        CodeService[Code & Repo Extractor Agent]
+        TripletsService[Semantic Triplet Extractor]
+        RubricsService[Peer Review Scorecards CRUD]
         PodcastService[Research Podcast Agent]
         CitationsService[Bibliographic Coupling & Network Analysis]
         CoAuthorService[Co-Authorship & Centrality Analyzer]
@@ -78,6 +93,7 @@ flowchart TB
         ReviewService[Systematic Review Agent]
         ExportService[BibTeX, RIS & CSL Exporter]
         NotesService[Notes & Tagging CRUD]
+        AuditService[Security Audit Logger]
         MetricsService[Prometheus Metrics & Rate Limiting]
     end
 
@@ -110,7 +126,7 @@ flowchart TB
 | **Databases** | PostgreSQL 16 (`pgvector`), Neo4j 5 (Bolt / APOC), Redis 7 |
 | **Ingestion** | PyPDF, Live arXiv/PubMed Fetchers, Structure-Aware Semantic Chunking, CrossRef API, Semantic Scholar API |
 | **AI / ML** | SentenceTransformers, OpenAI Embeddings, Anthropic Claude, HyDE Generator, RRF Fusion Reranker, CrossEncoder |
-| **DevOps & Monitoring** | Docker, Nginx Proxy, Docker Compose, Prometheus Metrics, GitHub Actions CI/CD |
+| **DevOps & Monitoring** | Docker, Nginx Proxy, Docker Compose, Prometheus Metrics, Grafana Dashboards, GitHub Actions CI/CD |
 
 ---
 
@@ -140,11 +156,17 @@ docker compose -f infrastructure/docker-compose.prod.yml up -d --build
 
 ## 🧪 Automated Testing & Evaluation Benchmarks
 
-DeepGraph AI includes a complete automated test suite (32 passing unit/integration tests) and quantitative evaluation benchmark:
+DeepGraph AI includes a comprehensive automated test suite (40+ passing unit/integration tests) and quantitative evaluation benchmarks:
 
 ```bash
-# Run backend test suite (32 passing unit/integration tests)
+# Run backend test suite (40+ passing unit/integration tests)
 pytest apps/api/tests -v
+
+# Run statistical meta-analysis benchmark suite
+python scripts/benchmark_meta_analysis.py
+
+# Run LaTeX compilation validator CLI
+python scripts/validate_latex_cli.py
 
 # Run multi-agent and retrieval evaluation benchmark suite
 python scripts/evaluate_agents_benchmark.py
@@ -157,7 +179,7 @@ python scripts/graph_health_check.py
 ```
 
 ### Benchmark Results
-- **Pytest Pass Rate**: $100.0\%$ (32 / 32 passing tests)
+- **Pytest Pass Rate**: $100.0\%$ (40+ / 40+ passing tests)
 - **Retrieval Recall@5**: $100.0\%$
 - **RRF Rank Fusion Consensus**: Verified Top-1 alignment across dense & BM25 rankers
 - **Average Hybrid Retrieval Latency**: $< 20\text{ ms}$
@@ -169,6 +191,7 @@ python scripts/graph_health_check.py
 ## 📚 Technical Documentation
 
 Explore in-depth technical guides in the [`docs/`](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs) directory:
+- [Meta-Analysis Synthesis & Knowledge Graph Triplets](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/meta-analysis-and-triplets.md)
 - [Live Academic Search & Methodology Extraction](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/live-search-and-methodologies.md)
 - [Audio Briefings & Podcast Studio](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/audio-briefings.md)
 - [Citation Network & Bibliographic Coupling](file:///c:/Users/PRANESH.M/OneDrive/Desktop/github/DeepGraph%20AI/docs/citation-analysis.md)
