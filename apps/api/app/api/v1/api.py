@@ -18,7 +18,8 @@ from app.api.v1.endpoints import (
     podcast,
     citations,
     verify,
-    tags
+    tags,
+    code_extract
 )
 
 api_router = APIRouter()
@@ -42,4 +43,6 @@ api_router.include_router(podcast.router, prefix="/podcast", tags=["Audio Briefi
 api_router.include_router(citations.router, prefix="/citations", tags=["Citation & Bibliographic Network"])
 api_router.include_router(verify.router, prefix="/verify", tags=["Fact-Checking & Claim Verification"])
 api_router.include_router(tags.router, prefix="/tags", tags=["Paper Tags & Classification"])
+api_router.include_router(code_extract.router, prefix="/code", tags=["Code & Repository Extraction"])
+
 
